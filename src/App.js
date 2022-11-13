@@ -1,7 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Landing from "../src/pages/Landing";
-import Browse from "../src/pages/Browse";
+import HomePage from "./components/Home/HomePage";
+import BrowsePage from "./components/Browse/BrowsePage";
+import CategoryPage from "./components/Category/CategoryPage";
+import CartPage from "./components/Cart/CartPage";
+import DetailPage from "./components/Detail/DetailPage";
 import "./sass/Style.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from "./components/Layout/Nav";
@@ -13,10 +16,12 @@ function App() {
       <Router>
         <div>
           <Nav />
-
           <Routes>
-            <Route path="/browse" element={<Browse />} />
-            <Route path="/" element={<Landing />} />
+            <Route path="/detail/:id" element={<DetailPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/category/:type" element={<CategoryPage />} />
+            <Route path="/browse" element={<BrowsePage />} />
+            <Route path="/" element={<HomePage />} />
           </Routes>
         </div>
       </Router>

@@ -1,11 +1,10 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { BASE_URL, TOKEN_PATH_REGISTER } from "../constants/api.js";
-import { saveToken, saveUser } from "../utils/storage";
+import { BASE_URL, TOKEN_PATH_REGISTER } from "../../constants/api.js";
+import { saveToken, saveUser } from "../../utils/storage";
 import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
-import { useNavigate } from "react-router";
+import AuthContext from "../../context/AuthContext";
 
 const schema = yup.object().shape({
   email: yup
@@ -17,8 +16,6 @@ const schema = yup.object().shape({
 });
 
 function RegistrationForm() {
-  const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -60,13 +57,13 @@ function RegistrationForm() {
       const json = await response.json();
 
       console.log(json);
-
-      setAuth(json);
-      navigate("/browse");
+      console.log("response", options);
 
       if (json.user) {
         saveToken(json.jwt);
         saveUser(json.user);
+
+        setAuth(json);
       }
 
       if (json.error) {

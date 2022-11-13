@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { BASE_URL, TOKEN_PATH } from "../constants/api";
-import AuthContext from "../context/AuthContext";
+import { BASE_URL, TOKEN_PATH } from "../../constants/api";
+import AuthContext from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
-import FormError from "./common/FormError";
-import { saveToken, saveUser } from "../utils/storage";
+import { getToken, getUser } from "../../utils/storage";
 
 const schema = yup.object().shape({
   email: yup
@@ -18,7 +17,7 @@ const schema = yup.object().shape({
 
 export default function LoginForm() {
   const [submitting, setSubmitting] = useState(false);
-  const [loginError, setLoginError] = useState(null);
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -42,7 +41,6 @@ export default function LoginForm() {
     const url = BASE_URL + TOKEN_PATH;
 
     setSubmitting(true);
-    setLoginError(null);
 
     const data = JSON.stringify({ identifier: email, password: password });
 
@@ -57,19 +55,21 @@ export default function LoginForm() {
       const response = await fetch(url, options);
       const json = await response.json();
 
-      console.log(json);
+      console.log("json", json);
       console.log("response", options);
 
       if (json.user) {
-        saveToken(json.jwt);
-        saveUser(json.user);
+        getToken(json.jwt);
+        getUser(json.user);
 
-        setAuth(response.options);
+        setAuth(json.user);
         navigate("/browse");
+      } else {
+        console.log(error);
+        setError("Incorrect email or password");
       }
     } catch (error) {
       console.log("error", error);
-      setLoginError(error.toString());
     } finally {
       setSubmitting(false);
     }
@@ -77,7 +77,6 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {loginError && <FormError>{loginError}</FormError>}
       <fieldset disabled={submitting}>
         <div>
           <input {...register("email")} placeholder="Email" />
@@ -90,6 +89,7 @@ export default function LoginForm() {
         </div>
 
         <button>{submitting ? "Loggin in..." : "Login"}</button>
+        {error ? <label>{error}</label> : null}
       </fieldset>
     </form>
   );

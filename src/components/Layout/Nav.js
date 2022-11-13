@@ -10,6 +10,7 @@ function Nav() {
   function logout() {
     setAuth(null);
     navigate("/");
+    localStorage.clear();
   }
 
   return (
@@ -26,6 +27,8 @@ function Nav() {
             <Link to="/login">Login</Link>
           )}
         </li>
+        <Link to="/cart">Your cart</Link>
+        <li></li>
       </ul>
     </nav>
   );
