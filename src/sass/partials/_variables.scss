@@ -1,0 +1,14 @@
+$font-primary: "Inter", sans-serif;
+
+$tablet-width: 768px;
+
+$colours: (
+  primary: #012c3f,
+  secondary: #000a1c,
+  accent: #093a50,
+  blue: #00b1ff,
+);
+
+@function getColour($colour) {
+  @return map-get($colours, $colour);
+}

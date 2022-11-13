@@ -20,6 +20,22 @@ export function removeCart() {
   localStorage.removeItem(cartKey);
 }
 
+export function updateCart(game) {
+  const currentCart = getCart();
+
+  const productExists = currentCart.find(function (item) {
+    return item.id === game.id;
+  });
+
+  if (productExists === undefined) {
+    currentCart.push(game);
+    saveCart(currentCart);
+  } else {
+    const newCart = currentCart.filter((item) => item.id !== game.id);
+    saveCart(newCart);
+  }
+}
+
 export function saveToken(token) {
   saveToStorage(tokenKey, token);
 }

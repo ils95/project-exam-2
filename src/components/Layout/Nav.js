@@ -17,7 +17,6 @@ function Nav() {
     <nav>
       <ul>
         <li>
-          <Link to="/">Home</Link>
           {auth ? (
             <>
               | <Link to="/browse">Browse</Link> |{" "}
@@ -27,8 +26,6 @@ function Nav() {
             <Link to="/login">Login</Link>
           )}
         </li>
-        <Link to="/cart">Your cart</Link>
-        <li></li>
       </ul>
     </nav>
   );

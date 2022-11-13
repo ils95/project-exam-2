@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BASE_URL, DETAIL_PATH } from "../../constants/api";
+import { BsCart, BsCartCheck } from "react-icons/bs";
+import { updateCart } from "../../utils/storage";
 
 function DetailsList() {
   let params = useParams();
   const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isActive, setIsActive] = useState(false);
 
   const url = BASE_URL + DETAIL_PATH + `${params.id}` + "?populate=*";
-  const imageUrl = "http://localhost:1337";
 
   useEffect(
     function () {
@@ -44,11 +46,20 @@ function DetailsList() {
 
   return (
     <>
-      <div>{details.attributes.title}</div>
+      <div
+        onClick={() => {
+          setIsActive(!isActive);
+          updateCart(details);
+          console.log("current cart ");
+        }}
+      >
+        {isActive ? <BsCartCheck /> : <BsCart />}
+      </div>
+      <div>{details.attributes.name}</div>
       <div>{details.attributes.description}</div>
       <img
-        src={imageUrl + details.attributes.image.data.attributes.url}
-        alt={details.title}
+        src={details.attributes.image.data.attributes.url}
+        alt={details.name}
       />
     </>
   );
